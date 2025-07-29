@@ -5,13 +5,13 @@ namespace Match
 {
 	public class FindMatch
 	{
-		public static IEnumerable<(int Row, int Col)> GetMatches(char[][] matrix, char target)
+		public static List<(int Row, int Col)> GetMatches(char[][] matrix, char target)
 		{
 			return matrix
 				.SelectMany((row, rowIndex) =>
 					row.Select((ch, colIndex) => new { ch, rowIndex, colIndex }))
 				.Where(x => x.ch == target)
-				.Select(x => (x.rowIndex, x.colIndex));
+				.Select(x => (x.rowIndex, x.colIndex)).ToList();
 		}
 
 		public static bool IsAdjacent((int Row, int Col) a, (int Row, int Col) b)
@@ -25,12 +25,12 @@ namespace Match
 		{
 			if(word.Length == 0) return false;
 
-			List<(int Row, int Col)> currentPositions = GetMatches(matrix, word[0]).ToList();
+			List<(int Row, int Col)> currentPositions = GetMatches(matrix, word[0]);
 
 			for(int i = 1; i < word.Length; i++)
 			{
 				var nextChar = word[i];
-				var nextPositions = GetMatches(matrix, nextChar).ToList();
+				var nextPositions = GetMatches(matrix, nextChar);
 
 				var prevPositions = currentPositions;
 
